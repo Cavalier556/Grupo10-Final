@@ -41,7 +41,7 @@ export class LoginComponent {
         .subscribe(
           (response) => {
             if (response && response.auth) {
-              this.router.navigate(['secreto']);
+              this.router.navigate(['dashboard']);
             } else {
               console.error('Error al identificarse');
             }
