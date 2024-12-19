@@ -75,7 +75,7 @@
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
       >
-        <h1 class="h2">Categorías</h1>
+        <h1 class="h2">Productos</h1>
       </div>
 
       <div class="card card-body bg-light shadow-sm">
@@ -83,12 +83,25 @@
         <form [formGroup]="newForm" (ngSubmit)="agregar()">
           <label class="form-label">Nombre</label>
           <input type="text" class="form-control" formControlName="nombre" />
-          <label class="form-label mt-2">Descripcion</label>
+          <label class="form-label mt-2">Ingredientes</label>
           <input
             type="text"
             class="form-control"
-            formControlName="descripcion"
+            formControlName="ingredientes"
           />
+          <label class="form-label mt-2">Precio</label>
+          <input type="number" class="form-control" formControlName="precio" />
+          <label class="form-label mt-2">Categoria</label>
+          <select class="form-select" formControlName="categoria">
+            <option
+              *ngFor="let categoria of categorias"
+              value="{{ categoria._id }}"
+            >
+              {{ categoria.nombre }}
+            </option>
+          </select>
+          <label class="form-label mt-2">Imagen</label>
+          <input type="text" class="form-control" formControlName="imagen" />
           <button type="sumbit" class="btn btn-primary mt-4">Nuevo</button>
         </form>
       </div>
@@ -99,7 +112,10 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Descripcion</th>
+              <th scope="col">Ingredientes</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Imagen</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
@@ -107,7 +123,12 @@
             <tr *ngFor="let row of data; index as i">
               <td>{{ i + 1 }}</td>
               <td>{{ row.nombre }}</td>
-              <td>{{ row.descripcion }}</td>
+              <td>{{ row.ingredientes }}</td>
+              <td>{{ row.precio }}</td>
+              <td [innerHTML]="getCategoriaName(row.categoria)">
+                {{ row.categoria }}
+              </td>
+              <td>{{ row.imagen }}</td>
               <td>
                 <button class="btn btn-info" (click)="onEdit(row)">
                   Editar

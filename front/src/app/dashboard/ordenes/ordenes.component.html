@@ -75,19 +75,19 @@
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
       >
-        <h1 class="h2">Categorías</h1>
+        <h1 class="h2">Ordenes</h1>
       </div>
 
       <div class="card card-body bg-light shadow-sm">
         <h4>Agregar Nuevo</h4>
         <form [formGroup]="newForm" (ngSubmit)="agregar()">
-          <label class="form-label">Nombre</label>
-          <input type="text" class="form-control" formControlName="nombre" />
-          <label class="form-label mt-2">Descripcion</label>
+          <label class="form-label">Mesa</label>
+          <input type="text" class="form-control" formControlName="mesa" />
+          <label class="form-label mt-2">Numero</label>
           <input
-            type="text"
+            type="number"
             class="form-control"
-            formControlName="descripcion"
+            formControlName="nroDeOrden"
           />
           <button type="sumbit" class="btn btn-primary mt-4">Nuevo</button>
         </form>
@@ -98,19 +98,24 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Descripcion</th>
+              <th scope="col">Mesa</th>
+              <th scope="col">Numero</th>
+              <th scope="col">Estado</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let row of data; index as i">
               <td>{{ i + 1 }}</td>
-              <td>{{ row.nombre }}</td>
-              <td>{{ row.descripcion }}</td>
+              <td>{{ row.mesa }}</td>
+              <td>{{ row.nroDeOrden }}</td>
+              <td>{{ row.estado }}</td>
               <td>
                 <button class="btn btn-info" (click)="onEdit(row)">
                   Editar
+                </button>
+                <button class="btn btn-success ms-2" (click)="onPagar(row._id)">
+                  Pagar
                 </button>
                 <button class="btn btn-danger ms-2" (click)="onDelete(row._id)">
                   Borrar

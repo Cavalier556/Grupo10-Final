@@ -1,29 +1,28 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-categorias',
-  templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.css'],
+  selector: 'app-clientes',
+  templateUrl: './clientes.component.html',
+  styleUrls: ['./clientes.component.css'],
 })
-export class CategoriasComponent implements OnInit {
+export class ClientesComponent {
   newForm: FormGroup;
   editForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private http: HttpClient
-  ) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.newForm = this.fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      email: ['', Validators.required],
+      telefono: ['', Validators.required],
+      dni: ['', Validators.required],
     });
     this.editForm = this.fb.group({
       editNombre: ['', Validators.required],
-      editDescripcion: ['', Validators.required],
+      editEmail: ['', Validators.required],
+      editTelefono: ['', Validators.required],
+      editDni: ['', Validators.required],
     });
   }
   data: any = [];
@@ -34,7 +33,7 @@ export class CategoriasComponent implements OnInit {
 
   fetchData() {
     this.http
-      .get('http://localhost:3000/api/categorias')
+      .get('http://localhost:3000/api/clientes')
       .subscribe((data: any) => {
         console.log(data);
         this.data = data;
@@ -60,7 +59,9 @@ export class CategoriasComponent implements OnInit {
     if (this.newForm.valid) {
       const body = JSON.stringify({
         nombre: this.newForm.value.nombre,
-        descripcion: this.newForm.value.descripcion,
+        email: this.newForm.value.email,
+        telefono: this.newForm.value.telefono,
+        dni: this.newForm.value.dni,
       });
 
       const headers = new HttpHeaders({
@@ -68,7 +69,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .post('http://localhost:3000/api/categoria', body, {
+        .post('http://localhost:3000/api/cliente', body, {
           headers,
         })
         .subscribe(
@@ -87,8 +88,10 @@ export class CategoriasComponent implements OnInit {
     if (this.editForm) {
       const editId = <HTMLInputElement>document.getElementById('editId');
       const body = JSON.stringify({
-        nombre: this.editForm.value.editNombre,
-        descripcion: this.editForm.value.editDescripcion,
+        nombre: this.newForm.value.editNombre,
+        email: this.newForm.value.editEmail,
+        telefono: this.newForm.value.editTelefono,
+        dni: this.newForm.value.editDni,
       });
 
       const headers = new HttpHeaders({
@@ -96,7 +99,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .put(`http://localhost:3000/api/categoria/${editId.value}`, body, {
+        .put(`http://localhost:3000/api/cliente/${editId.value}`, body, {
           headers,
         })
         .subscribe(
@@ -118,16 +121,20 @@ export class CategoriasComponent implements OnInit {
     editId.value = row._id;
     const editNombre = <HTMLInputElement>document.getElementById('editNombre');
     editNombre.value = row.nombre;
-    const editDescripcion = <HTMLInputElement>(
-      document.getElementById('editDescripcion')
+    const editEmail = <HTMLInputElement>document.getElementById('editEmail');
+    editEmail.value = row.email;
+    const editTelefono = <HTMLInputElement>(
+      document.getElementById('editTelefono')
     );
-    editDescripcion.value = row.descripcion;
+    editTelefono.value = row.telefono;
+    const editDni = <HTMLInputElement>document.getElementById('editDni');
+    editDni.value = row.dni;
   }
 
   onDelete(id: number): void {
     console.log(id);
     this.http
-      .delete(`http://localhost:3000/api/categoria/${id}`)
+      .delete(`http://localhost:3000/api/cliente/${id}`)
       .subscribe((data: any) => {
         console.log(data);
         window.location.reload();

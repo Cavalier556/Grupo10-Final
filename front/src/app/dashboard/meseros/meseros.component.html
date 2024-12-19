@@ -75,7 +75,7 @@
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
       >
-        <h1 class="h2">Categorías</h1>
+        <h1 class="h2">Meseros</h1>
       </div>
 
       <div class="card card-body bg-light shadow-sm">
@@ -83,12 +83,18 @@
         <form [formGroup]="newForm" (ngSubmit)="agregar()">
           <label class="form-label">Nombre</label>
           <input type="text" class="form-control" formControlName="nombre" />
-          <label class="form-label mt-2">Descripcion</label>
+          <label class="form-label mt-2">Apellido</label>
+          <input type="text" class="form-control" formControlName="apellido" />
+          <label class="form-label mt-2">Usuario</label>
+          <input type="text" class="form-control" formControlName="usuario" />
+          <label class="form-label mt-2">Contraseña</label>
           <input
-            type="text"
+            type="password"
             class="form-control"
-            formControlName="descripcion"
+            formControlName="password"
           />
+          <label class="form-label mt-2">Dni</label>
+          <input type="text" class="form-control" formControlName="dni" />
           <button type="sumbit" class="btn btn-primary mt-4">Nuevo</button>
         </form>
       </div>
@@ -99,7 +105,9 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Descripcion</th>
+              <th scope="col">Apellido</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">DNI</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
@@ -107,7 +115,9 @@
             <tr *ngFor="let row of data; index as i">
               <td>{{ i + 1 }}</td>
               <td>{{ row.nombre }}</td>
-              <td>{{ row.descripcion }}</td>
+              <td>{{ row.apellido }}</td>
+              <td>{{ row.usuario }}</td>
+              <td>{{ row.dni }}</td>
               <td>
                 <button class="btn btn-info" (click)="onEdit(row)">
                   Editar
@@ -146,12 +156,26 @@
               class="form-control"
               formControlName="editNombre"
             />
-            <label class="form-label mt-2">Descripcion</label>
+            <label class="form-label mt-2">Apellido</label>
             <input
               type="text"
               class="form-control"
-              formControlName="editDescripcion"
-              id="editDescripcion"
+              formControlName="editApellido"
+              id="editApellido"
+            />
+            <label class="form-label mt-2">Usuario</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="editUsuario"
+              id="editUsuario"
+            />
+            <label class="form-label mt-2">DNI</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="editDni"
+              id="editDni"
             />
             <button type="sumbit" class="btn btn-primary mt-4">
               Actualizar

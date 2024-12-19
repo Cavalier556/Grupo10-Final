@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-categorias',
-  templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.css'],
+  selector: 'app-productos',
+  templateUrl: './productos.component.html',
+  styleUrls: ['./productos.component.css'],
 })
-export class CategoriasComponent implements OnInit {
+export class ProductosComponent {
   newForm: FormGroup;
   editForm: FormGroup;
 
@@ -19,26 +19,46 @@ export class CategoriasComponent implements OnInit {
   ) {
     this.newForm = this.fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      ingredientes: ['', Validators.required],
+      precio: ['', Validators.required],
+      categoria: ['', Validators.required],
+      imagen: ['', Validators.required],
     });
     this.editForm = this.fb.group({
       editNombre: ['', Validators.required],
-      editDescripcion: ['', Validators.required],
+      editIngredientes: ['', Validators.required],
+      editPrecio: ['', Validators.required],
+      editCategoria: ['', Validators.required],
+      editImagen: ['', Validators.required],
     });
   }
   data: any = [];
+  categorias: any = [];
 
   ngOnInit(): void {
     this.fetchData();
   }
 
   fetchData() {
+    this.http.get('http://localhost:3000/api/platos').subscribe((data: any) => {
+      console.log(data);
+      this.data = data;
+    });
     this.http
       .get('http://localhost:3000/api/categorias')
-      .subscribe((data: any) => {
-        console.log(data);
-        this.data = data;
+      .subscribe((categorias: any) => {
+        console.log(categorias);
+        this.categorias = categorias;
       });
+  }
+
+  getCategoriaName(id: any) {
+    console.log(id);
+    const categoria = this.categorias.filter(
+      (obj: { _id: any }) => obj._id === id
+    )[0];
+    console.log(categoria);
+    return categoria ? categoria.nombre : '';
   }
 
   openModal() {
@@ -60,7 +80,10 @@ export class CategoriasComponent implements OnInit {
     if (this.newForm.valid) {
       const body = JSON.stringify({
         nombre: this.newForm.value.nombre,
-        descripcion: this.newForm.value.descripcion,
+        ingredientes: this.newForm.value.ingredientes,
+        precio: this.newForm.value.precio,
+        categoria: this.newForm.value.categoria,
+        imagen: this.newForm.value.imagen,
       });
 
       const headers = new HttpHeaders({
@@ -68,7 +91,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .post('http://localhost:3000/api/categoria', body, {
+        .post('http://localhost:3000/api/plato', body, {
           headers,
         })
         .subscribe(
@@ -96,7 +119,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .put(`http://localhost:3000/api/categoria/${editId.value}`, body, {
+        .put(`http://localhost:3000/api/plato/${editId.value}`, body, {
           headers,
         })
         .subscribe(
@@ -127,7 +150,7 @@ export class CategoriasComponent implements OnInit {
   onDelete(id: number): void {
     console.log(id);
     this.http
-      .delete(`http://localhost:3000/api/categoria/${id}`)
+      .delete(`http://localhost:3000/api/plato/${id}`)
       .subscribe((data: any) => {
         console.log(data);
         window.location.reload();

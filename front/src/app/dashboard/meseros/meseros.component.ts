@@ -1,29 +1,30 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-categorias',
-  templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.css'],
+  selector: 'app-meseros',
+  templateUrl: './meseros.component.html',
+  styleUrls: ['./meseros.component.css'],
 })
-export class CategoriasComponent implements OnInit {
+export class MeserosComponent implements OnInit {
   newForm: FormGroup;
   editForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private http: HttpClient
-  ) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.newForm = this.fb.group({
       nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      apellido: ['', Validators.required],
+      usuario: ['', Validators.required],
+      password: ['', Validators.required],
+      dni: ['', Validators.required],
     });
     this.editForm = this.fb.group({
       editNombre: ['', Validators.required],
-      editDescripcion: ['', Validators.required],
+      editApellido: ['', Validators.required],
+      editUsuario: ['', Validators.required],
+      editPassword: ['', Validators.required],
+      editDni: ['', Validators.required],
     });
   }
   data: any = [];
@@ -34,7 +35,7 @@ export class CategoriasComponent implements OnInit {
 
   fetchData() {
     this.http
-      .get('http://localhost:3000/api/categorias')
+      .get('http://localhost:3000/api/meseros')
       .subscribe((data: any) => {
         console.log(data);
         this.data = data;
@@ -60,7 +61,10 @@ export class CategoriasComponent implements OnInit {
     if (this.newForm.valid) {
       const body = JSON.stringify({
         nombre: this.newForm.value.nombre,
-        descripcion: this.newForm.value.descripcion,
+        apellido: this.newForm.value.apellido,
+        usuario: this.newForm.value.usuario,
+        contrasena: this.newForm.value.password,
+        dni: this.newForm.value.dni,
       });
 
       const headers = new HttpHeaders({
@@ -68,7 +72,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .post('http://localhost:3000/api/categoria', body, {
+        .post('http://localhost:3000/api/mesero', body, {
           headers,
         })
         .subscribe(
@@ -87,8 +91,11 @@ export class CategoriasComponent implements OnInit {
     if (this.editForm) {
       const editId = <HTMLInputElement>document.getElementById('editId');
       const body = JSON.stringify({
-        nombre: this.editForm.value.editNombre,
-        descripcion: this.editForm.value.editDescripcion,
+        nombre: this.newForm.value.editNombre,
+        apellido: this.newForm.value.editApellido,
+        usuario: this.newForm.value.editUsuario,
+        contrasena: this.newForm.value.editPassword,
+        dni: this.newForm.value.editDni,
       });
 
       const headers = new HttpHeaders({
@@ -96,7 +103,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .put(`http://localhost:3000/api/categoria/${editId.value}`, body, {
+        .put(`http://localhost:3000/api/mesero/${editId.value}`, body, {
           headers,
         })
         .subscribe(
@@ -118,16 +125,22 @@ export class CategoriasComponent implements OnInit {
     editId.value = row._id;
     const editNombre = <HTMLInputElement>document.getElementById('editNombre');
     editNombre.value = row.nombre;
-    const editDescripcion = <HTMLInputElement>(
-      document.getElementById('editDescripcion')
+    const editApellido = <HTMLInputElement>(
+      document.getElementById('editApellido')
     );
-    editDescripcion.value = row.descripcion;
+    editApellido.value = row.apellido;
+    const editUsuario = <HTMLInputElement>(
+      document.getElementById('editUsuario')
+    );
+    editUsuario.value = row.usuario;
+    const editDni = <HTMLInputElement>document.getElementById('editDni');
+    editDni.value = row.dni;
   }
 
   onDelete(id: number): void {
     console.log(id);
     this.http
-      .delete(`http://localhost:3000/api/categoria/${id}`)
+      .delete(`http://localhost:3000/api/mesero/${id}`)
       .subscribe((data: any) => {
         console.log(data);
         window.location.reload();

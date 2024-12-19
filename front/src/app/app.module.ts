@@ -12,9 +12,13 @@ import { SecretoComponent } from './secreto/secreto.component';
 import { RegistrarComponent } from './registrar/registrar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CategoriasComponent } from './dashboard/categorias/categorias.component';
+import { ProductosComponent } from './dashboard/productos/productos.component';
+import { MeserosComponent } from './dashboard/meseros/meseros.component';
+import { ClientesComponent } from './dashboard/clientes/clientes.component';
+import { OrdenesComponent } from './dashboard/ordenes/ordenes.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, SecretoComponent, RegistrarComponent, DashboardComponent, CategoriasComponent],
+  declarations: [AppComponent, LoginComponent, SecretoComponent, RegistrarComponent, DashboardComponent, CategoriasComponent, ProductosComponent, MeserosComponent, ClientesComponent, OrdenesComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

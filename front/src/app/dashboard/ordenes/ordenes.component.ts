@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-categorias',
-  templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.css'],
+  selector: 'app-ordenes',
+  templateUrl: './ordenes.component.html',
+  styleUrls: ['./ordenes.component.css'],
 })
-export class CategoriasComponent implements OnInit {
+export class OrdenesComponent {
   newForm: FormGroup;
   editForm: FormGroup;
 
@@ -18,15 +18,16 @@ export class CategoriasComponent implements OnInit {
     private http: HttpClient
   ) {
     this.newForm = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      mesa: ['', Validators.required],
+      nroDeOrden: ['', Validators.required],
     });
     this.editForm = this.fb.group({
-      editNombre: ['', Validators.required],
-      editDescripcion: ['', Validators.required],
+      editMesa: ['', Validators.required],
+      editNroDeOrden: ['', Validators.required],
     });
   }
   data: any = [];
+  platos: any = [];
 
   ngOnInit(): void {
     this.fetchData();
@@ -34,10 +35,16 @@ export class CategoriasComponent implements OnInit {
 
   fetchData() {
     this.http
-      .get('http://localhost:3000/api/categorias')
+      .get('http://localhost:3000/api/ordenes')
       .subscribe((data: any) => {
         console.log(data);
         this.data = data;
+      });
+    this.http
+      .get('http://localhost:3000/api/platos')
+      .subscribe((platos: any) => {
+        console.log(platos);
+        this.platos = platos;
       });
   }
 
@@ -59,8 +66,8 @@ export class CategoriasComponent implements OnInit {
     console.log('click');
     if (this.newForm.valid) {
       const body = JSON.stringify({
-        nombre: this.newForm.value.nombre,
-        descripcion: this.newForm.value.descripcion,
+        mesa: this.newForm.value.mesa,
+        nroDeOrden: this.newForm.value.nroDeOrden,
       });
 
       const headers = new HttpHeaders({
@@ -68,7 +75,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .post('http://localhost:3000/api/categoria', body, {
+        .post('http://localhost:3000/api/orden', body, {
           headers,
         })
         .subscribe(
@@ -87,8 +94,8 @@ export class CategoriasComponent implements OnInit {
     if (this.editForm) {
       const editId = <HTMLInputElement>document.getElementById('editId');
       const body = JSON.stringify({
-        nombre: this.editForm.value.editNombre,
-        descripcion: this.editForm.value.editDescripcion,
+        mesa: this.editForm.value.editMesa,
+        numero: this.editForm.value.editNumero,
       });
 
       const headers = new HttpHeaders({
@@ -96,7 +103,7 @@ export class CategoriasComponent implements OnInit {
       });
 
       this.http
-        .put(`http://localhost:3000/api/categoria/${editId.value}`, body, {
+        .put(`http://localhost:3000/api/orden/${editId.value}`, body, {
           headers,
         })
         .subscribe(
@@ -116,18 +123,38 @@ export class CategoriasComponent implements OnInit {
     this.openModal();
     const editId = <HTMLInputElement>document.getElementById('editId');
     editId.value = row._id;
-    const editNombre = <HTMLInputElement>document.getElementById('editNombre');
-    editNombre.value = row.nombre;
-    const editDescripcion = <HTMLInputElement>(
-      document.getElementById('editDescripcion')
-    );
-    editDescripcion.value = row.descripcion;
+    const editMesa = <HTMLInputElement>document.getElementById('editMesa');
+    editMesa.value = row.mesa;
+    const editNumero = <HTMLInputElement>document.getElementById('editNumero');
+    editNumero.value = row.numero;
+  }
+
+  onPagar(id: number): void {
+    const body = JSON.stringify({
+      estado: 'Pagado',
+    });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    this.http
+      .put(`http://localhost:3000/api/orden/${id}`, body, {
+        headers,
+      })
+      .subscribe(
+        (response) => {
+          console.log('success');
+          window.location.reload();
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
   }
 
   onDelete(id: number): void {
     console.log(id);
     this.http
-      .delete(`http://localhost:3000/api/categoria/${id}`)
+      .delete(`http://localhost:3000/api/orden/${id}`)
       .subscribe((data: any) => {
         console.log(data);
         window.location.reload();
