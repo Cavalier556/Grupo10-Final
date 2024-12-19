@@ -38,9 +38,10 @@ export const addCategoria = async (req, res) => {
 };
 
 export const updateCategoria = async (req, res) => {
-  const { nombre } = req.body;
+  const { nombre, descripcion } = req.body;
   const nuevaCategoria = {};
   if (nombre) nuevaCategoria.nombre = nombre;
+  if (descripcion) nuevaCategoria.descripcion = descripcion;
   try {
     let categoria = await Categoria.findById(req.params.id);
     if (!categoria) {
@@ -64,7 +65,7 @@ export const delCategoria = async (req, res) => {
     if (!categoria) {
       return res.status(404).json({ msg: "Categoría no encontrada." });
     }
-    await Categoria.findByIdAndRemove({ _id: req.params.id });
+    await Categoria.findByIdAndDelete({ _id: req.params.id });
     res.json({ msg: "Categoría eliminada" });
   } catch (error) {
     console.log(error);

@@ -22,7 +22,7 @@ export const getMesero = async (req, res) => {
 };
 
 export const addMesero = async (req, res) => {
-  const { nombre, apellido, usuario, contraseña, dni } = req.body;
+  const { nombre, apellido, usuario, contrasena, dni } = req.body;
   try {
     let existente = await Mesero.findOne({ dni });
     if (existente) {
@@ -32,13 +32,13 @@ export const addMesero = async (req, res) => {
       });
     }
 
-    const passwordHash = await bcryptjs.hash(contraseña, 10);
+    const passwordHash = await bcryptjs.hash(contrasena, 10);
 
     const newMesero = new Mesero({
       nombre,
       apellido,
       usuario,
-      contraseña: passwordHash,
+      contrasena: passwordHash,
       dni,
     });
 
@@ -58,12 +58,11 @@ export const addMesero = async (req, res) => {
 };
 
 export const updateMesero = async (req, res) => {
-  const { nombre, apellido, dni, telefono } = req.body;
+  const { nombre, apellido, dni } = req.body;
   const nuevoMesero = {};
   if (nombre) nuevoMesero.nombre = nombre;
   if (apellido) nuevoMesero.apellido = apellido;
   if (dni) nuevoMesero.dni = dni;
-  if (telefono) nuevoMesero.telefono = telefono;
   try {
     let mesero = await Mesero.findById(req.params.id);
     if (!mesero) {
@@ -87,7 +86,7 @@ export const delMesero = async (req, res) => {
     if (!mesero) {
       return res.status(404).json({ msg: "Mesero no encontrado" });
     }
-    await Mesero.findByIdAndRemove({ _id: req.params.id });
+    await Mesero.findByIdAndDelete({ _id: req.params.id });
     res.json({ msg: "Mesero eliminado" });
   } catch (error) {
     console.log(error);
